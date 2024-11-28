@@ -1,0 +1,61 @@
+.flight-list-container {
+    width: 100%;
+    padding: 20px;
+
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+
+        input {
+            width: 100%;
+        }
+    }
+
+    .export-flights-button {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .export-flights-button:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+
+
+    .add-flight-button {
+        padding: 10px 20px;
+        margin-bottom: 5px;
+        margin-right: 8px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .add-flight-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+
+
+}

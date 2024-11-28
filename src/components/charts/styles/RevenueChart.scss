@@ -1,0 +1,52 @@
+.chart_revenue {
+    h2 {
+        text-align: center;
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .chart-options {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+
+
+    }
+
+    button.button_option_chart_revenue {
+        padding: 10px 20px;
+        background-color: #06dc1b;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+
+    .dropdown-container {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 15px;
+
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+    }
+
+    .chart-container {
+        padding: 20px;
+    }
+}

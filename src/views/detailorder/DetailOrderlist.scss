@@ -1,0 +1,77 @@
+.detail-container {
+    padding: 20px;
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .user-table,
+    .booking-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .even-row {
+        background-color: #f9f9f9; // Màu nhạt
+    }
+
+    .odd-row {
+        background-color: #e0e0e0; // Màu đậm hơn
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+
+            &:disabled {
+                background-color: #cccccc;
+            }
+
+            &:hover:not(:disabled) {
+                background-color: #0056b3;
+            }
+        }
+
+        span {
+            margin: 0 10px;
+        }
+    }
+
+    .back-button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}

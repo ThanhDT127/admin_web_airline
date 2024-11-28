@@ -1,0 +1,65 @@
+.aircraft-table {
+    margin-top: 10px;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+
+    th,
+    td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    thead {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #e6e6e6;
+    }
+
+    tbody tr:hover {
+        background-color: #ffffff;
+    }
+
+    .edit-button,
+    .delete-button {
+        padding: 8px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        text-transform: capitalize;
+    }
+
+    .edit-button {
+        background-color: #ffc107;
+    }
+
+    .edit-button:hover {
+        background-color: #e0a800;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .delete-button {
+        background-color: #dc3545;
+    }
+
+    .delete-button:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+}

@@ -1,0 +1,46 @@
+// src/components/Sidebar.scss
+
+.sidebar {
+    background-color: #2e3b4e;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 25px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: 250px;
+}
+
+.sidebar-header {
+    margin-bottom: 20px;
+}
+
+.sidebar h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.sidebar-links {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar a {
+    display: block;
+    padding: 15px 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s;
+    margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+    background-color: #394a5a;
+    transform: translateX(5px);
+
+}

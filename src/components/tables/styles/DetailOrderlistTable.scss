@@ -1,0 +1,32 @@
+/* src/components/tables/DetailOrderlistTable.scss */
+.table-container {
+    width: 100%;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.detail-orderlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.detail-orderlist-table th,
+.detail-orderlist-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.detail-orderlist-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.detail-orderlist-table td {
+    background-color: #fff;
+}
+
+.detail-orderlist-table .highlight-row {
+    background-color: #f1f1f1;
+}

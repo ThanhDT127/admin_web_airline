@@ -1,0 +1,67 @@
+.airline-list-container {
+    width: 100%;
+    padding: 20px;
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+        text-align: left;
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+
+        }
+    }
+
+    .add-airline-button {
+        padding: 10px 15px;
+        margin-bottom: 5px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        text-transform: capitalize;
+        font-size: 14px;
+    }
+
+    .add-airline-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .export-airlines-button {
+        padding: 10px 15px;
+        margin-bottom: 5px;
+        margin-left: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, 0.2s ease, box-shadow 0.3s ease;
+        text-transform: capitalize;
+        font-size: 14px;
+    }
+
+    .export-airlines-button:hover {
+        background-color: #158635;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    }
+}

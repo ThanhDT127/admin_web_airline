@@ -1,0 +1,64 @@
+.aircraft-form-container h3 {
+    margin-bottom: 15px;
+}
+
+.aircraft-form-container label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.aircraft-form-container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.submit-button,
+.cancel-button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+}
+
+
+.submit-button {
+    background-color: #3953ff !important;
+
+}
+
+.submit-button:hover {
+    background-color: #3658c8;
+    transform: scale(1.05);
+}
+
+.cancel-button {
+    background-color: #f84e37 !important;
+
+}
+
+.cancel-button:hover {
+    background-color: #e66b3e;
+    transform: scale(1.05);
+
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+}

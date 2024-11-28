@@ -1,0 +1,79 @@
+// src/components/tables/UserTable.scss
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+
+    thead {
+        background-color: #007bff;
+
+        th {
+            color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+    }
+
+    tbody {
+        tr {
+            &:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+
+        .details-button,
+        .edit-button,
+        .delete-button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-button {
+            background-color: #007bff;
+        }
+
+        .details-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .edit-button {
+            background-color: #ffc107;
+        }
+
+        .edit-button:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+    }
+}

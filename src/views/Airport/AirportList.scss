@@ -1,0 +1,67 @@
+.airport-list-container {
+    width: 100%;
+    padding: 20px;
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .search-bar {
+        margin-bottom: 20px;
+    }
+
+}
+
+
+.airport-list-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+
+    h2 {
+        margin-bottom: 20px;
+    }
+
+
+
+
+}
+
+.export-airport-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
+}
+
+.export-airport-button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+
+.add-airport-button {
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-airport-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}

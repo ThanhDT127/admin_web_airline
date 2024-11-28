@@ -1,0 +1,37 @@
+// src/components/Navbar.scss
+
+.navbar {
+    background-color: #394a5a !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 20px !important;
+    border-bottom-left-radius: 5px;
+}
+
+
+.navbar h2 {
+    font-size: 22px;
+    color: #edf4ff;
+    margin: 0;
+}
+
+.navbar .navbar-links button {
+    background-color: #ff4d4f;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.navbar .navbar-links button:hover {
+    background-color: #d43f3a;
+    transform: scale(1.05);
+}
+
+.navbar button {
+    margin-right: 10px;
+}

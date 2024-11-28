@@ -1,0 +1,30 @@
+// src/components/tables/Pagination.scss
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+
+
+    button.bt_pagination {
+        font-weight: bold;
+        padding: 10px 15px !important;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #005eff;
+        }
+
+        &:disabled {
+            background-color: #ccc;
+            cursor: not-allowed !important;
+
+
+        }
+    }
+}
