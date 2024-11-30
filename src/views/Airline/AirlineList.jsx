@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AirlineList.scss';
+import * as XLSX from 'xlsx';
 import config from "../config.json";
 import Pagination from '../../components/Pagination/Pagination';
 import AirlineForm from '../../components/form/AirlineForm';
@@ -161,6 +162,7 @@ const AirlineList = () => {
     };
 
     const exportToExcel = () => {
+        setAirlines(airlines.sort((a, b) => a.id - b.id))
         const worksheet = XLSX.utils.json_to_sheet(airlines);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Airlines");

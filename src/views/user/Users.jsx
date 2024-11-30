@@ -28,6 +28,7 @@ function Users() {
     });
     const [errorMessage, setErrorMessage] = useState("");
 
+
     useEffect(() => {
         fetchUsers();
         const intervalId = setInterval(() => {
@@ -97,7 +98,7 @@ function Users() {
             phoneNumber: formData.get('phoneNumber')?.trim(),
             role: formData.get('role')?.trim() || "CUSTOMER",
         };
-        console.log(userData)
+        // console.log(userData)
         // Chuyển chữ cái đầu tiên của firstName và lastName thành chữ hoa
         userData.firstName = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
         userData.lastName = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
@@ -233,7 +234,10 @@ function Users() {
     };
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(users);
+
+        setUsers(users.sort((a, b) => a.id - b.id))
+        const filteredData = users.map(({ password, ...rest }) => rest);
+        const worksheet = XLSX.utils.json_to_sheet(filteredData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
         XLSX.writeFile(workbook, "User_List.xlsx");

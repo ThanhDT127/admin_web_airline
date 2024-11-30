@@ -80,33 +80,64 @@ const BookingList = () => {
     };
 
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(bookings);
+
+        const sortedBookings = [...bookings].sort((a, b) => a.bookingId - b.bookingId);
+
+
+        const formattedData = sortedBookings.map((booking) => {
+            const user = users[booking.user.id] || {};
+            const flight = flights[booking.flightId] || {};
+            const ticketType = booking.bookingTicketType[0]?.ticketType || {};
+
+            return {
+                "Booking ID": booking.bookingId,
+                "Full Name": user.fullName || "Unknown",
+                "Username": user.username || "Unknown",
+                "Phone Number": user.phoneNumber || "Unknown",
+                "Email": user.email || "Unknown",
+                "Flight Number": flight.flightNumber || "Unknown Flight",
+                "Status": booking.status,
+                "Total Price": booking.totalPrice,
+                "Seat Class": ticketType.seatClass || "Unknown",
+                "Ticket Name": ticketType.name || "Unknown",
+                "Luggage": booking.luggage.length > 0
+                    ? booking.luggage.map((lug) => `Price: ${lug.price}, Weight: ${lug.weight}kg`).join("; ")
+                    : "No Luggage",
+                "Passengers": booking.passengers.length > 0
+                    ? booking.passengers.map(
+                        (passenger) => `${passenger.firstName} ${passenger.lastName} (DOB: ${passenger.dateOfBirth})`
+                    ).join("; ")
+                    : "No Passengers",
+            };
+        });
+
+
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Bookings');
-        XLSX.writeFile(workbook, 'bookings.xlsx');
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Bookings");
+        XLSX.writeFile(workbook, "bookings.xlsx");
     };
 
-    // Filter bookings by username and phone number based on search term
-    const filteredBookings = bookings.filter((booking) => {
-        const user = booking.user;  // Lấy user trực tiếp từ trường `user` trong booking
-        const userName = user ? user.username.toLowerCase() : '';  // Lấy username
-        const userPhone = user ? user.phoneNumber : '';  // Lấy phoneNumber
-        const searchQuery = searchTerm.toLowerCase();  // Chuyển đổi từ khóa tìm kiếm thành chữ thường
 
-        // Tìm kiếm theo username hoặc phoneNumber
+
+    const filteredBookings = bookings.filter((booking) => {
+        const user = booking.user;
+        const userName = user ? user.username.toLowerCase() : '';
+        const userPhone = user ? user.phoneNumber : '';
+        const searchQuery = searchTerm.toLowerCase();
+
+
         return (
-            userName.includes(searchQuery) ||  // Tìm kiếm theo username
-            String(userPhone).includes(searchQuery) ||  // Tìm kiếm theo phoneNumber
-            String(booking.phoneNumber).includes(searchQuery) // Tìm kiếm theo phoneNumber trong booking nếu có
+            userName.includes(searchQuery) ||
+            String(userPhone).includes(searchQuery) ||
+            String(booking.phoneNumber).includes(searchQuery)
         );
     });
 
-    // Paginate filtered bookings
+
     const indexOfLastBooking = currentPage * bookingsPerPage;
     const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
     const paginatedBookings = filteredBookings.slice(indexOfFirstBooking, indexOfLastBooking);
-
-    // Recalculate totalPages based on filtered data
     const totalFilteredPages = Math.ceil(filteredBookings.length / bookingsPerPage);
 
     return (

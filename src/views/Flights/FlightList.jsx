@@ -22,7 +22,6 @@ const Flightlist = () => {
     const [transitPoints, setTransitPoints] = useState([]);
     const [showTransitPointFields, setShowTransitPointFields] = useState(false);
     const [allFlights, setallFlights] = useState([]);
-    const [errors, setErrors] = useState({});
 
 
     useEffect(() => {
@@ -117,7 +116,9 @@ const Flightlist = () => {
 
 
     const handleExportToExcel = () => {
-        const exportData = flights.map(flight => ({
+        const sortedFlights = [...flights].sort((a, b) => a.flightId - b.flightId);
+
+        const exportData = sortedFlights.map(flight => ({
             "Flight ID": flight.flightId,
             "Flight Number": flight.flightNumber,
             "Aircraft Model": flight.aircraft?.model || 'Unknown',

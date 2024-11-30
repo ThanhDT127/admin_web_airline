@@ -15,18 +15,22 @@ export const fetchWithToken = async (url, options = {}) => {
     try {
         const response = await fetch(url, fetchOptions);
 
-        if (response.status === 401) {
+
+        if (response.status === 200) {
+            if (localStorage.getItem("sessionExpired") === "true") {
+                localStorage.setItem("sessionExpired", "false");
+            }
+
+        } else if (response.status === 401) {
             if (!localStorage.getItem("sessionExpired")) {
                 localStorage.setItem("sessionExpired", "true");
                 alert("Your session has expired. Please log in again.");
                 localStorage.removeItem("adminToken");
                 window.location.href = "/login";
             }
-            return null;
         }
-
-
         return response;
+
     } catch (error) {
         console.error("Error fetching.", error);
         throw error;

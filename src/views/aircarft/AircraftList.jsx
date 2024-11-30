@@ -152,6 +152,7 @@ const AircraftList = () => {
         }
     };
     const exportToExcel = () => {
+        setAircrafts(aircrafts.sort((a, b) => a.id - b.id))
         const worksheet = XLSX.utils.json_to_sheet(aircrafts);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Aircrafts");

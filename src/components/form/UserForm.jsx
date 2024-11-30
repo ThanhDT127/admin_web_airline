@@ -20,6 +20,7 @@ const UserForm = ({
                 <h3>{formType === "add" ? "Add User" : "Edit User"}</h3>
                 <form onSubmit={onSubmit}>
                     <div className="form-group">
+                        <label>First Name:</label>
                         <input
                             type="text"
                             name="firstName"
@@ -33,6 +34,7 @@ const UserForm = ({
                         )}
                     </div>
                     <div className="form-group">
+                        <label>Last Name:</label>
                         <input
                             type="text"
                             name="lastName"
@@ -46,6 +48,7 @@ const UserForm = ({
                         )}
                     </div>
                     <div className="form-group">
+                        <label>Email:</label>
                         <input
                             type="email"
                             name="email"
@@ -53,12 +56,14 @@ const UserForm = ({
                             onChange={onChange}
                             placeholder="Email"
                             required
+                            readOnly={formType === "edit"} // Không cho phép thay đổi khi edit
                         />
                         {errorMessage.email && (
                             <span className="error">{errorMessage.email}</span>
                         )}
                     </div>
                     <div className="form-group">
+                        <label>Username:</label>
                         <input
                             type="text"
                             name="username"
@@ -66,32 +71,37 @@ const UserForm = ({
                             onChange={onChange}
                             placeholder="Username"
                             required
+                            readOnly={formType === "edit"} // Không cho phép thay đổi khi edit
                         />
                         {errorMessage.username && (
                             <span className="error">{errorMessage.username}</span>
                         )}
                     </div>
-                    <div className="form-group password-container">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            value={formData.password}
-                            onChange={onChange}
-                            placeholder="Password"
-                            required={formType === "add"}
-                        />
-                        <button
-                            type="button"
-                            onClick={togglePasswordVisibility}
-                            className="password-toggle-button"
-                        >
-                            {showPassword ? <FaEye /> : <FaEyeSlash />}
-                        </button>
-                        {errorMessage.password && (
-                            <span className="error">{errorMessage.password}</span>
-                        )}
-                    </div>
+                    {formType === "add" && ( // Ẩn trường password khi là edit
+                        <div className="form-group password-container">
+                            <label>Password:</label>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
+                                value={formData.password}
+                                onChange={onChange}
+                                placeholder="Password"
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                                className="password-toggle-button"
+                            >
+                                {showPassword ? <FaEye /> : <FaEyeSlash />}
+                            </button>
+                            {errorMessage.password && (
+                                <span className="error">{errorMessage.password}</span>
+                            )}
+                        </div>
+                    )}
                     <div className="form-group">
+                        <label>Phone Number:</label>
                         <input
                             type="text"
                             name="phoneNumber"
@@ -104,6 +114,7 @@ const UserForm = ({
                         )}
                     </div>
                     <div className="form-group">
+                        <label>Role:</label>
                         <select
                             name="role"
                             value={formData.role}
