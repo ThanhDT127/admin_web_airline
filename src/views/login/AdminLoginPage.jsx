@@ -36,7 +36,6 @@ const AdminLoginPage = () => {
                 localStorage.setItem("adminToken", data.token);
                 localStorage.setItem("userId", data.userId);
 
-                // Navigate to admin dashboard
                 navigate("/dashboard");
             } else {
                 setError("Access denied. You do not have admin privileges.");

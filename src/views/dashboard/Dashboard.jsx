@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import StatisticCard from '../../components/cards/StatisticCard';
 import TrafficChart from '../../components/charts/TrafficChart';
 import RevenueChart from '../../components/charts/RevenueChart';
-import FlightTable from '../../components/tables/TopFlightTable';
+import TopFlightTable from '../../components/tables/TopFlightTable';
 import Pagination from '../../components/Pagination/Pagination';
 import { fetchWithToken } from '../fetchWithToken';
 import config from '../config.json';
@@ -16,6 +16,7 @@ const { SERVER_API } = config;
 
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
+  const [bookingall, setbookingall] = useState([]);
   const [flights, setFlights] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,11 +34,20 @@ function Dashboard() {
         const data = await response.json();
         const confirmedBookings = data.filter(booking => booking.status === 'CONFIRMED');
         setBookings(confirmedBookings);
+        setbookingall(data);
+        // console.log(data.length)
+        // console.log(confirmedBookings.length)
+
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
     };
     fetchBookings();
+    const intervalId = setInterval(() => {
+      fetchBookings();
+    }, 30000);
+    return () => clearInterval(intervalId);
+
   }, []);
 
   // Fetch flights
@@ -52,6 +62,12 @@ function Dashboard() {
       }
     };
     fetchFlights();
+
+    const intervalId = setInterval(() => {
+      fetchFlights();
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   // Fetch users
@@ -67,7 +83,15 @@ function Dashboard() {
         setLoading(false);
       }
     };
+
+
     fetchUsers();
+
+    const intervalId = setInterval(() => {
+      fetchUsers();
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
 
@@ -120,28 +144,35 @@ function Dashboard() {
 
   const revenueData = calculateRevenue(filterType);
 
-  // Function to calculate top 10 flights
+
   const getTopFlights = () => {
-    const flightMap = {};
+    const flightCountMap = {};
 
-    flights.forEach((flight) => {
-      const key = `${flight.departureAirport.airportId}-${flight.arrivalAirport.airportId}`;
-      flightMap[key] = (flightMap[key] || 0) + 1;
+
+    bookings.forEach((booking) => {
+      if (booking.status === 'CONFIRMED') {
+        const flightId = booking.flightId;
+        flightCountMap[flightId] = (flightCountMap[flightId] || 0) + 1;
+      }
     });
 
-    const sortedFlights = Object.entries(flightMap)
+
+    const topFlightIds = Object.entries(flightCountMap)
       .sort(([, countA], [, countB]) => countB - countA)
-      .slice(0, 10);
+      .slice(0, 10)
+      .map(([flightId]) => parseInt(flightId));
 
-    return sortedFlights.map(([key]) => {
-      const [departure, arrival] = key.split('-');
-      return flights.find(
-        (flight) =>
-          flight.departureAirport.airportId === parseInt(departure) &&
-          flight.arrivalAirport.airportId === parseInt(arrival)
-      );
-    });
+
+    const topFlightsWithCount = flights
+      .filter(flight => topFlightIds.includes(flight.flightId))
+      .map(flight => ({
+        ...flight,
+        bookingCount: flightCountMap[flight.flightId]
+      }));
+    // console.log(topFlightsWithCount)
+    return topFlightsWithCount;
   };
+
 
   const topFlights = getTopFlights();
 
@@ -182,7 +213,7 @@ function Dashboard() {
       </div>
 
       {/* Flights Table */}
-      <FlightTable flights={currentFlights} />
+      <TopFlightTable flights={currentFlights} />
 
       <Pagination
         currentPage={currentPage}

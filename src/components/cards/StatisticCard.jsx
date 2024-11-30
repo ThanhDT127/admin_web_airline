@@ -2,7 +2,7 @@
 import React from 'react';
 import './StatisticCard.scss';
 
-function StatisticCard({ title, value, change, icon, color }) {
+function StatisticCard({ title, value, change, icon, color, value2, value3 }) {
     return (
         <div className="statistic-card" style={{ backgroundColor: color }}>
             <div className="statistic-icon">{icon}</div>

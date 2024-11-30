@@ -32,11 +32,16 @@ const AirlineList = () => {
                 setLoading(false);
             }
         };
+
+        const intervalId = setInterval(fetchAirlines, 30000);
+
         fetchAirlines();
+
+        return () => clearInterval(intervalId);
+
     }, []);
 
     useEffect(() => {
-        console.log("currentPage updated:", currentPage); // Kiểm tra cập nhật
     }, [currentPage]);
 
     const handleEdit = (airline) => {
@@ -118,7 +123,7 @@ const AirlineList = () => {
             currentAirline.name === airlineData.name &&
             currentAirline.code === airlineData.code
         ) {
-            alert("No changes were made.");
+            alert("No changes detected. Please make changes before submitting.");
             return;
         }
 
@@ -174,13 +179,7 @@ const AirlineList = () => {
     if (loading) {
         return <div>Loading airlines...</div>;
     }
-    // console.log(filteredAirlines)
-    // console.log({
-    //     currentPage,
-    //     indexOfFirstAirline,
-    //     indexOfLastAirline,
-    //     currentAirlines,
-    // });
+
 
     return (
         <div className="airline-list-container">

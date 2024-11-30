@@ -31,7 +31,11 @@ const AircraftList = () => {
                 setLoading(false);
             }
         };
+        const intervalId = setInterval(fetchAircrafts, 30000);
+
         fetchAircrafts();
+
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleEdit = (aircraft) => {
@@ -109,6 +113,16 @@ const AircraftList = () => {
         try {
             let response;
             if (currentAircraft) {
+
+                if (
+                    currentAircraft &&
+                    currentAircraft.model === aircraftData.model &&
+                    currentAircraft.totalSeat === aircraftData.totalSeat
+                ) {
+                    alert("No changes detected. Please make changes before submitting.");
+                    return;
+                }
+
                 response = await fetchWithToken(`${SERVER_API}/aircraft/${currentAircraft.id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },

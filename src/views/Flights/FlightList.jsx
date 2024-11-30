@@ -41,6 +41,13 @@ const Flightlist = () => {
         };
 
         fetchFlights();
+
+        const intervalId = setInterval(() => {
+            fetchFlights();
+        }, 30000);
+
+
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -65,6 +72,12 @@ const Flightlist = () => {
         };
 
         fetchAdditionalData();
+
+        const intervalId = setInterval(() => {
+            fetchAdditionalData();
+        }, 30000);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleAddTransitPoint = () => {
@@ -84,7 +97,6 @@ const Flightlist = () => {
                 arrivalTime: '',
                 departureTime: ''
             }])
-        console.log(newStopOrder)
 
 
 
@@ -134,9 +146,6 @@ const Flightlist = () => {
     };
 
     const handleEdit = (flight) => {
-        console.log("data flight edit")
-        console.log(flight)
-
         setCurrentFlight(flight);
         setShowForm(true);
 
@@ -232,6 +241,20 @@ const Flightlist = () => {
     const handleSubmitForm = async (e) => {
         e.preventDefault();
 
+        // Chuyển đổi giờ và phút từ local time sang UTC bằng cách cộng thêm giờ
+        const convertToUTC = (localTime) => {
+            const date = new Date(localTime);
+            date.setHours(date.getHours() + 14);
+            return date.toISOString();
+        };
+
+        const convertToUTC2 = (localTime) => {
+            const date = new Date(localTime);
+            date.setHours(date.getHours() + 14);
+            return date.toISOString();
+        };
+
+
         const formData = new FormData(e.target);
         const flightData = {
             flightNumber: formData.get("flightNumber"),
@@ -239,15 +262,15 @@ const Flightlist = () => {
             airlineId: parseInt(formData.get("airlineId")),
             departureAirportId: parseInt(formData.get("departureAirportId")),
             arrivalAirportId: parseInt(formData.get("arrivalAirportId")),
-            departureTime: new Date(formData.get("departureTime")).toISOString(),
-            arrivalTime: new Date(formData.get("arrivalTime")).toISOString(),
+            departureTime: convertToUTC(formData.get("departureTime")),
+            arrivalTime: convertToUTC(formData.get("arrivalTime")),
             basePrice: parseFloat(formData.get("basePrice")),
             status: formData.get("status"),
             transitPointList: transitPoints.map((point) => ({
                 stopOrder: parseInt(point.stopOrder),
                 airportId: parseInt(point.airport.airportId),
-                arrivalTime: new Date(point.arrivalTime).toISOString(),
-                departureTime: new Date(point.departureTime).toISOString(),
+                arrivalTime: point.arrivalTime,
+                departureTime: point.departureTime,
             })),
         };
 
@@ -256,48 +279,51 @@ const Flightlist = () => {
             return;
         }
 
-
-
-
         try {
-
             if (currentFlight) {
-                // const arraysAreEqual = (arr1, arr2) => {
-                //     if (arr1.length !== arr2.length) return false;
-                //     for (let i = 0; i < arr1.length; i++) {
-                //         const point1 = arr1[i];
-                //         const point2 = arr2[i];
-                //         if (
-                //             point1.stopOrder !== point2.stopOrder ||
-                //             point1.airportId !== point2.airportId ||
-                //             point1.arrivalTime !== point2.arrivalTime ||
-                //             point1.departureTime !== point2.departureTime
-                //         ) {
-                //             return false;
-                //         }
-                //     }
-                //     return true;
-                // };
+                const isDataChanged = (currentFlight, flightData) => {
+                    const parseDate = (dateStr) => {
+                        const date = new Date(dateStr);
+                        return date.toISOString().slice(0, 19);
+                    };
 
-                // const isDataChanged = currentFlight && (
-                //     currentFlight.flightNumber !== flightData.flightNumber ||
-                //     currentFlight.aircraft.aircraftId !== flightData.aircraftId ||
-                //     currentFlight.airline.airlineId !== flightData.airlineId ||
-                //     currentFlight.departureAirport.airportId !== flightData.departureAirportId ||
-                //     currentFlight.arrivalAirport.airportId !== flightData.arrivalAirportId ||
-                //     currentFlight.departureTime !== flightData.departureTime ||
-                //     currentFlight.arrivalTime !== flightData.arrivalTime ||
-                //     currentFlight.basePrice !== flightData.basePrice ||
-                //     currentFlight.status !== flightData.status ||
-                //     !arraysAreEqual(currentFlight.transitPointList, flightData.transitPointList) // Hàm kiểm tra mảng
-                // );
+                    if (
+                        currentFlight.flightNumber !== flightData.flightNumber ||
+                        currentFlight.aircraft?.aircraftId !== flightData.aircraftId ||
+                        currentFlight.airline?.airlineId !== flightData.airlineId ||
+                        currentFlight.departureAirport?.airportId !== flightData.departureAirportId ||
+                        currentFlight.arrivalAirport?.airportId !== flightData.arrivalAirportId ||
+                        currentFlight.departureTime !== parseDate(flightData.departureTime) ||
+                        currentFlight.arrivalTime !== parseDate(flightData.arrivalTime) ||
+                        currentFlight.basePrice !== flightData.basePrice ||
+                        currentFlight.status !== flightData.status
+                    ) {
+                        return true;
+                    }
 
 
-                // if (!isDataChanged) {
-                //     alert("Data not be changes");
-                //     return;
-                // }
+                    // Check if transit points have changed
+                    const areTransitPointsChanged = currentFlight.transitPointList.some((currentPoint, index) => {
+                        const newPoint = flightData.transitPointList[index];
+                        return (
+                            currentFlight.transitPointList.length !== flightData.transitPointList.length ||
+                            currentPoint.stopOrder !== newPoint?.stopOrder ||
+                            currentPoint?.airport.airportId !== newPoint?.airportId ||
+                            parseDate(currentPoint.arrivalTime) !== parseDate(newPoint?.arrivalTime) ||
+                            parseDate(currentPoint.departureTime) !== parseDate(newPoint?.departureTime)
+                        );
 
+                    });
+
+                    return areTransitPointsChanged;
+                };
+
+
+                // Check if the data has changed
+                if (currentFlight && !isDataChanged(currentFlight, flightData)) {
+                    alert("No changes detected. Data was not updated.");
+                    return;
+                }
 
                 const flightRes = await fetchWithToken(`${SERVER_API}/flights/all`);
                 const flights = await flightRes.json();
@@ -312,38 +338,30 @@ const Flightlist = () => {
                     await Promise.all(deletePromises);
                 }
 
-
-
-
                 const putResponse = await fetchWithToken(`${SERVER_API}/flights/${currentFlight.flightId}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(flightData),
                 });
 
-                console.log("data put :\n")
-                console.log(flightData);
-
                 if (!putResponse.ok) throw new Error("Error Updated.");
-                alert("Flight updated suscessful!");
+                alert("Flight updated successfully!");
             } else {
                 const allFlightdata = allFlights;
                 const flightExists = allFlightdata.some(flight => flight.flightNumber === flightData.flightNumber);
                 if (flightExists) {
                     alert("Flight number already exists.")
                 }
+
                 const postResponse = await fetchWithToken(`${SERVER_API}/flights/add`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(flightData),
                 });
-                console.log("data post :\n")
-                console.log(flightData)
 
                 if (!postResponse.ok) throw new Error("Error Add Flight.");
                 alert("Add Flight successful!");
             }
-
 
             const updatedFlights = await (await fetchWithToken(`${SERVER_API}/flights/all`)).json();
             const sortedFlights = updatedFlights.sort((a, b) => b.flightId - a.flightId);
@@ -353,10 +371,9 @@ const Flightlist = () => {
             setTransitPoints([]);
         } catch (error) {
             console.error("Lỗi xử lý handleSubmitForm:", error);
-            alert("ERROR Please Try A Gain!");
+            alert("ERROR Please Try Again!");
         }
     };
-
 
 
 

@@ -31,8 +31,11 @@ const AirportList = () => {
                 setLoading(false);
             }
         };
+        const intervalId = setInterval(fetchAirports, 30000);
 
         fetchAirports();
+
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleEdit = (airport) => {
@@ -72,13 +75,12 @@ const AirportList = () => {
             city: formData.get('city').trim(),
             country: formData.get('country').trim(),
         };
-        console.log(airportData);
         const errors = {};
 
         if (!airportData.code) {
             errors.code = "Code is required.";
-        } else if (!/^[A-Z0-9]{3,10}$/.test(airportData.code)) {
-            errors.code = "Airline code must be 3-10 uppercase letters (no spaces , no special character).";
+        } else if (!/^[A-Z0-9]{3}$/.test(airportData.code)) {
+            errors.code = "Airline code must be 3 uppercase letters (no spaces , no special character).";
         }
 
         if (!airportData.name) {
@@ -119,7 +121,7 @@ const AirportList = () => {
                 airportData.country !== currentAirport.country;
 
             if (!hasChanges) {
-                alert("No fields have been modified.");
+                alert("No changes detected. Please make changes before submitting..");
                 return;
             }
         }

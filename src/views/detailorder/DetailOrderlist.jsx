@@ -47,6 +47,13 @@ const DetailOrderlist = () => {
         };
 
         fetchData();
+
+        const intervalId = setInterval(() => {
+            fetchData();
+        }, 30000);
+
+        return () => clearInterval(intervalId);
+
     }, [id]);
 
     if (loading) {
@@ -61,18 +68,6 @@ const DetailOrderlist = () => {
 
     const totalPages = Math.ceil(bookings.length / bookingsPerPage);
 
-    // Chuyển trang
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
 
     return (
         <div className="detail-container">

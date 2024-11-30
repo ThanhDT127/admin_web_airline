@@ -30,7 +30,14 @@ function Users() {
 
     useEffect(() => {
         fetchUsers();
+        const intervalId = setInterval(() => {
+            fetchUsers();
+            console.log("fetch")
+        }, 30000);
+
+        return () => clearInterval(intervalId);
     }, []);
+
 
     const fetchUsers = async () => {
         setLoading(true);
@@ -152,10 +159,31 @@ function Users() {
             errors.username = "An user with this username already exists.";
         }
 
+        const duplicateEmail = users.find(
+            (user) => user.email.toLowerCase() === userData.email.toLowerCase() &&
+                user.id !== currentUser?.id
+        );
+
+        if (duplicateEmail) {
+            errors.email = "This email is already in use.";
+        }
+
         if (Object.keys(errors).length > 0) {
             setErrorMessage(errors);
             return;
         }
+
+
+        const hasChanges = () => {
+            if (!currentUser) return true;
+            return Object.keys(formData).some(key => formData[key] !== currentUser[key]);
+        };
+
+        if (formType === "edit" && !hasChanges()) {
+            alert("No changes detected. Please make changes before submitting.");
+            return;
+        }
+
 
         try {
             let response;

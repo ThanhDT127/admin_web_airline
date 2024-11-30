@@ -58,7 +58,15 @@ const TrafficChart = () => {
     };
 
     useEffect(() => {
+
+
         fetchData();
+
+
+        const intervalId = setInterval(() => {
+            fetchData();
+        }, 30000);
+        return () => clearInterval(intervalId);
     }, [year]);
 
     if (loading) {

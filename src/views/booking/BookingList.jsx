@@ -14,23 +14,32 @@ const BookingList = () => {
     const [flights, setFlights] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    // const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState(""); // For search
     const bookingsPerPage = 10;
 
+    // Fetching data on initial render and every 30 seconds
     useEffect(() => {
         fetchBookings();
         fetchUsers();
         fetchFlights();
+        const interval = setInterval(() => {
+            fetchBookings();
+            fetchUsers();
+            fetchFlights();
+        }, 30000); // Update every 30 seconds
+
+        // Clean up interval on component unmount
+        return () => clearInterval(interval);
     }, [currentPage]);
 
     const fetchBookings = async () => {
         try {
             const response = await fetchWithToken(`${SERVER_API}/bookings/all`);
             const data = await response.json();
-            setBookings(data.sort((a, b) => a.bookingId - b.bookingId));
+            setBookings(data);
             setTotalPages(Math.ceil(data.length / bookingsPerPage));
         } catch (error) {
-            console.error('Lỗi khi lấy danh sách bookings:', error);
+            console.error('Error fetching booking list:', error);
         }
     };
 
@@ -40,11 +49,16 @@ const BookingList = () => {
             const data = await response.json();
             const userMap = {};
             data.forEach(user => {
-                userMap[user.id] = `${user.firstName} ${user.lastName}`;
+                userMap[user.id] = {
+                    fullName: `${user.firstName} ${user.lastName}`,
+                    phoneNumber: user.phoneNumber,
+                    email: user.email,
+                    username: user.username,
+                };
             });
             setUsers(userMap);
         } catch (error) {
-            console.error('Lỗi khi lấy danh sách users:', error);
+            console.error('Error fetching users:', error);
         }
     };
 
@@ -54,11 +68,14 @@ const BookingList = () => {
             const data = await response.json();
             const flightMap = {};
             data.forEach(flight => {
-                flightMap[flight.flightId] = flight.flightNumber;
+                flightMap[flight.flightId] = {
+                    flightNumber: flight.flightNumber,
+                    basePrice: flight.basePrice,
+                };
             });
             setFlights(flightMap);
         } catch (error) {
-            console.error('Lỗi khi lấy danh sách flights:', error);
+            console.error('Error fetching flights:', error);
         }
     };
 
@@ -68,38 +85,55 @@ const BookingList = () => {
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Bookings');
         XLSX.writeFile(workbook, 'bookings.xlsx');
     };
-    // const filteredUsers = users.filter((bookings) =>
-    //     bookings.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //     bookings.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //     String(bookings.phoneNumber).includes(searchTerm)
-    // );
 
-    const paginatedBookings = bookings.slice((currentPage - 1) * bookingsPerPage, currentPage * bookingsPerPage);
+    // Filter bookings by username and phone number based on search term
+    const filteredBookings = bookings.filter((booking) => {
+        const user = booking.user;  // Lấy user trực tiếp từ trường `user` trong booking
+        const userName = user ? user.username.toLowerCase() : '';  // Lấy username
+        const userPhone = user ? user.phoneNumber : '';  // Lấy phoneNumber
+        const searchQuery = searchTerm.toLowerCase();  // Chuyển đổi từ khóa tìm kiếm thành chữ thường
+
+        // Tìm kiếm theo username hoặc phoneNumber
+        return (
+            userName.includes(searchQuery) ||  // Tìm kiếm theo username
+            String(userPhone).includes(searchQuery) ||  // Tìm kiếm theo phoneNumber
+            String(booking.phoneNumber).includes(searchQuery) // Tìm kiếm theo phoneNumber trong booking nếu có
+        );
+    });
+
+    // Paginate filtered bookings
+    const indexOfLastBooking = currentPage * bookingsPerPage;
+    const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
+    const paginatedBookings = filteredBookings.slice(indexOfFirstBooking, indexOfLastBooking);
+
+    // Recalculate totalPages based on filtered data
+    const totalFilteredPages = Math.ceil(filteredBookings.length / bookingsPerPage);
 
     return (
         <div className="bookings-page">
-            <h1>Quản lý Bookings</h1>
+            <h1>Manage Bookings</h1>
 
-            {/* <div className="search-bar">
+            <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="Search bookings by user..."
+                    placeholder="Search bookings by username or phone number..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1);  // Reset page to 1 when search term changes
+                    }}
                 />
-            </div> */}
+            </div>
 
             <button className="export-button" onClick={exportToExcel}>Export to Excel</button>
 
             <BookingTable bookings={paginatedBookings} users={users} flights={flights} />
 
-
             <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={totalFilteredPages}  // Use totalFilteredPages instead of totalPages
                 onPageChange={setCurrentPage}
             />
-
         </div>
     );
 };

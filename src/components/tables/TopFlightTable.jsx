@@ -1,11 +1,11 @@
-// src/components/tables/FlightTable.jsx
+// src/components/tables/TopFlightTable.jsx
 import React from 'react';
 import './styles/FlightTable.scss';
 
-function FlightTable({ flights }) {
+function TopFlightTable({ flights }) {
     return (
         <div className="flight-list-container">
-            <h3>Top 10 Flights with Most Frequent Routes</h3>
+            <h3>Top Flights with Most Frequent Routes</h3>
             <table className="flight-table">
                 <thead>
                     <tr>
@@ -14,6 +14,7 @@ function FlightTable({ flights }) {
                         <th>Arrival Airport</th>
                         <th>Departure Time</th>
                         <th>Arrival Time</th>
+                        <th>Booking Count</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,6 +25,7 @@ function FlightTable({ flights }) {
                             <td>{flight.arrivalAirport.airportName}</td>
                             <td>{new Date(flight.departureTime).toLocaleString()}</td>
                             <td>{new Date(flight.arrivalTime).toLocaleString()}</td>
+                            <td>{flight.bookingCount}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -32,4 +34,4 @@ function FlightTable({ flights }) {
     );
 }
 
-export default FlightTable;
+export default TopFlightTable;
