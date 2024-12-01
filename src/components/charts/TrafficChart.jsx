@@ -1,8 +1,10 @@
-// src/components/charts/TrafficChart.jsx
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import './styles/TrafficChart.scss';
 import { fetchWithToken } from '../../views/fetchWithToken';
+
 const TrafficChart = () => {
     const [data, setData] = useState([]);
     const [year, setYear] = useState(new Date().getFullYear());
@@ -58,16 +60,21 @@ const TrafficChart = () => {
     };
 
     useEffect(() => {
-
-
         fetchData();
-
-
         const intervalId = setInterval(() => {
             fetchData();
         }, 30000);
         return () => clearInterval(intervalId);
     }, [year]);
+
+    const exportChartToPDF = async () => {
+        const chartElement = document.querySelector('.traffic-chart-container');
+        const canvas = await html2canvas(chartElement);
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'PNG', 10, 10, 190, 0); // Resize image to fit A4
+        pdf.save(`Traffic_Chart_${year}.pdf`);
+    };
 
     if (loading) {
         return <div className="loading">Loading chart...</div>;
@@ -75,17 +82,20 @@ const TrafficChart = () => {
 
     return (
         <div className="traffic-chart-container">
-
             <h2 className="chart-title">Monthly Traffic and Income Data</h2>
+            <button className="export-chart-btn" onClick={exportChartToPDF}>
+                Export Chart to PDF
+            </button>
             <div className="year-selector">
+
                 <label>Select Year: </label>
                 <select value={year} onChange={(e) => setYear(e.target.value)}>
                     {getPastTenYears().map((y) => (
                         <option key={y} value={y}>{y}</option>
                     ))}
                 </select>
-            </div>
 
+            </div>
             <LineChart width={900} height={600} data={data} className="traffic-chart">
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />

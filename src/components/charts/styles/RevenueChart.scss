@@ -17,7 +17,7 @@
 
     button.button_option_chart_revenue {
         padding: 10px 20px;
-        background-color: #06dc1b;
+        background-color: #455eff;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -48,5 +48,36 @@
 
     .chart-container {
         padding: 20px;
+    }
+}
+
+.bn-export-chart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+
+
+
+.button_export_chart_revenue {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #2ada41;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #45a049;
+    }
+
+    &:active {
+        background-color: #3e8e41;
     }
 }

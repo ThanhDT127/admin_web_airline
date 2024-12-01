@@ -1,93 +1,70 @@
 .modal {
     display: flex;
 
-    /* Hiển thị modal dưới dạng flexbox */
+
     justify-content: center;
-    /* Canh giữa nội dung */
     align-items: center;
-    /* Canh giữa theo chiều dọc */
     position: fixed;
-    /* Định vị cố định */
     top: 0;
     left: 0;
     width: 100%;
-    /* Đặt chiều rộng toàn màn hình */
     height: 100%;
-    /* Đặt chiều cao toàn màn hình */
     background-color: rgba(0, 0, 0, 0.5);
-    /* Nền mờ để làm nổi bật modal */
     z-index: 1000;
-    /* Đảm bảo modal nằm trên các phần tử khác */
     overflow-y: auto;
 
 
     .modal-content {
         margin-top: 100px;
         background-color: #fff;
-        /* Nền trắng cho nội dung modal */
         padding: 20px;
-        /* Padding cho nội dung */
         border-radius: 8px;
-        /* Bo tròn các góc */
         width: 80%;
-        /* Đặt chiều rộng của modal là 80% */
         max-width: 600px;
-        /* Giới hạn chiều rộng tối đa */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        /* Đổ bóng cho modal */
         position: relative;
-        /* Định vị tương đối để sử dụng z-index */
     }
 
     .close-button {
         position: absolute;
-        /* Định vị nút đóng */
         top: 10px;
-        /* Cách từ trên cùng */
         right: 10px;
-        /* Cách từ bên phải */
         background: transparent;
-        /* Nền trong suốt */
         border: none;
-        /* Không có viền */
         cursor: pointer;
-        /* Hiển thị con trỏ chuột khi hover */
         font-size: 20px;
-        /* Kích thước chữ cho nút đóng */
     }
 
     .flight-form {
-        background-color: #fff; // Nền trắng cho form
+        background-color: #fff;
         padding: 20px;
-        border-radius: 8px; // Bo tròn các góc
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Đổ bóng cho form
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
         max-height: 90vh;
-        /* Giới hạn chiều cao của form */
         overflow-y: auto;
 
-        /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
         h3 {
             margin-bottom: 20px;
-            color: #333; // Màu tiêu đề của form
+            color: #333;
         }
 
         label {
-            display: block; // Hiển thị label dưới dạng block
-            margin-bottom: 10px; // Khoảng cách dưới mỗi label
-            color: #555; // Màu chữ của label
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
         }
 
         input,
         select {
-            width: 100%; // Đặt chiều rộng bằng 100%
-            padding: 10px; // Thêm khoảng đệm cho input và select
+            width: 100%;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin-bottom: 15px; // Khoảng cách giữa các trường
+            margin-bottom: 15px;
 
             &:focus {
-                border-color: #007bff; // Thay đổi màu viền khi chọn
+                border-color: #007bff;
                 outline: none;
             }
         }
