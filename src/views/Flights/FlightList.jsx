@@ -215,15 +215,28 @@ const Flightlist = () => {
 
         flightData.transitPointList.forEach((transit, index) => {
             const nextTransit = flightData.transitPointList[index + 1];
+
+            // Kiểm tra thời gian của điểm dừng hiện tại
+            if (new Date(transit.arrivalTime) >= new Date(transit.departureTime)) {
+                errors.transitTimes = `Arrival time of transit ${transit.stopOrder} must be before departure time.`;
+            }
+
+            // Kiểm tra thời gian giữa điểm dừng hiện tại và điểm dừng kế tiếp
             if (nextTransit) {
-                if (new Date(transit.arrivalTime) >= new Date(nextTransit.departureTime)) {
-                    errors.transitTimes = `Arrival time of transit ${transit.stopOrder} must be before departure time of transit ${nextTransit.stopOrder}.`;
+                if (new Date(transit.departureTime) >= new Date(nextTransit.arrivalTime)) {
+                    errors.transitTimes = `Departure time of transit ${transit.stopOrder} must be before arrival time of transit ${nextTransit.stopOrder}.`;
                 }
             }
-            if (new Date(transit.arrivalTime) >= new Date(transit.departureTime)) {
-                errors.transitTimes = `Arrival time of transit ${transit.stopOrder} must be after departure time.`;
+
+            // Kiểm tra ràng buộc với thời gian chuyến bay chính
+            if (index === 0 && new Date(transit.arrivalTime) <= new Date(flightData.departureTime)) {
+                errors.transitTimes = `Arrival time of the first transit point (${transit.stopOrder}) must be after the flight's departure time.`;
+            }
+            if (index === flightData.transitPointList.length - 1 && new Date(transit.departureTime) >= new Date(flightData.arrivalTime)) {
+                errors.transitTimes = `Departure time of the last transit point (${transit.stopOrder}) must be before the flight's arrival time.`;
             }
         });
+
 
         if (isNaN(flightData.basePrice) || flightData.basePrice <= 0) {
             errors.price = "Price must be a positive number.";
@@ -283,10 +296,12 @@ const Flightlist = () => {
         try {
             if (currentFlight) {
                 const isDataChanged = (currentFlight, flightData) => {
+
                     const parseDate = (dateStr) => {
                         const date = new Date(dateStr);
                         return date.toISOString().slice(0, 19);
                     };
+                    let checkdataflight = false;
 
                     if (
                         currentFlight.flightNumber !== flightData.flightNumber ||
@@ -299,28 +314,31 @@ const Flightlist = () => {
                         currentFlight.basePrice !== flightData.basePrice ||
                         currentFlight.status !== flightData.status
                     ) {
-                        return true;
+                        checkdataflight = true;
                     }
 
 
                     // Check if transit points have changed
-                    const areTransitPointsChanged = currentFlight.transitPointList.some((currentPoint, index) => {
-                        const newPoint = flightData.transitPointList[index];
-                        return (
-                            currentFlight.transitPointList.length !== flightData.transitPointList.length ||
-                            currentPoint.stopOrder !== newPoint?.stopOrder ||
-                            currentPoint?.airport.airportId !== newPoint?.airportId ||
-                            parseDate(currentPoint.arrivalTime) !== parseDate(newPoint?.arrivalTime) ||
-                            parseDate(currentPoint.departureTime) !== parseDate(newPoint?.departureTime)
-                        );
+                    const checkdataflighttransitpoint = currentFlight.transitPointList.length !== flightData.transitPointList.length ||
+                        currentFlight.transitPointList.some((currentPoint, index) => {
+                            const newPoint = flightData.transitPointList[index];
+                            return (
+                                currentPoint.stopOrder !== newPoint?.stopOrder ||
+                                currentPoint?.airport?.airportId !== newPoint?.airportId ||
+                                parseDate(currentPoint.arrivalTime) !== parseDate(newPoint?.arrivalTime) ||
+                                parseDate(currentPoint.departureTime) !== parseDate(newPoint?.departureTime)
+                            );
+                        });
 
-                    });
-
+                    // Kiểm tra xem có sự thay đổi về transit point hay không
+                    let areTransitPointsChanged = checkdataflight || checkdataflighttransitpoint;
                     return areTransitPointsChanged;
                 };
 
 
                 // Check if the data has changed
+                // console.log(currentFlight)
+                // console.log(flightData)
                 if (currentFlight && !isDataChanged(currentFlight, flightData)) {
                     alert("No changes detected. Data was not updated.");
                     return;

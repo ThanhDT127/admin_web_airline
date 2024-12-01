@@ -33,7 +33,7 @@ function Users() {
         fetchUsers();
         const intervalId = setInterval(() => {
             fetchUsers();
-            console.log("fetch")
+            // console.log("fetch")
         }, 30000);
 
         return () => clearInterval(intervalId);
@@ -229,6 +229,7 @@ function Users() {
 
             if (response.ok) {
                 alert(currentUser ? "User updated successfully" : "User added successfully");
+                setErrorMessage([]);
                 setShowForm(false);
                 fetchUsers();
             } else {

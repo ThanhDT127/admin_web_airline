@@ -194,7 +194,7 @@ const FlightForm = ({
                         <button type="button" className="button-add-transitpoint" onClick={handleAddTransitPoint}>
                             Add Transit Point
                         </button>
-                        <button className="button-submit">Submit</button>
+                        <button className="button-submit">{currentFlight ? "Save Changes" : "Add Flight"}</button>
                         <button type="button" className="button-cancel" onClick={() => {
                             setShowForm(false);
                             // setShowTransitPointFields(false);

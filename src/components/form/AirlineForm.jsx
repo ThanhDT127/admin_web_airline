@@ -29,7 +29,7 @@ const AirlineForm = ({ currentAirline, onSubmit, onCancel, errorMessage }) => {
                         {errorMessage?.code && <span className="error">{errorMessage.code}</span>}
                     </label>
                     <div className="button-container">
-                        <button type="submit" className="submit-button">Submit</button>
+                        <button type="submit" className="submit-button">{currentAirline ? "Save Changes" : "Add Airline"}</button>
                         <button type="button" className="cancel-button" onClick={onCancel}>Cancel</button>
                     </div>
                 </form>

@@ -27,7 +27,7 @@ const AircraftForm = ({ currentAircraft, onSubmit, onCancel, errorMessage }) => 
                     {errorMessage?.totalSeat && <span className="error">{errorMessage.totalSeat}</span>}
                 </label>
                 <div className="button-group">
-                    <button type="submit" className="submit-button">Submit</button>
+                    <button type="submit" className="submit-button">{currentAircraft ? "Save Changes" : "Add Aircraft"}</button>
                     <button type="button" className="cancel-button" onClick={onCancel}>Cancel</button>
                 </div>
             </form>

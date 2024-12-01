@@ -49,7 +49,7 @@ const AirportForm = ({ currentAirport, onSubmit, onCancel, errorMessage }) => {
                         />
                         {errorMessage?.country && <span className="error">{errorMessage.country}</span>}
                     </label>
-                    <button type="submit" className="submit-button">Submit</button>
+                    <button type="submit" className="submit-button">{currentAirport ? "Save Changes" : "Add Airport"}</button>
                     <button type="button" className="cancel-button" onClick={onCancel}>Cancel</button>
                 </form>
             </div>

@@ -150,6 +150,7 @@ const AirportList = () => {
             if (response.ok) {
                 alert(currentAirport ? "Airport updated successfully!" : "Airport added successfully!");
                 setShowForm(false);
+                setErrorMessage([]);
                 const response = await fetchWithToken(`${SERVER_API}/airports/all`);
                 const data = await response.json();
                 setAirports(data.sort((a, b) => b.id - a.id));

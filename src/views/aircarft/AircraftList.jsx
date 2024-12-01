@@ -139,6 +139,7 @@ const AircraftList = () => {
             if (response.ok) {
                 alert(currentAircraft ? "Aircraft updated successfully" : "Aircraft added successfully");
                 setShowForm(false);
+                setErrorMessage([]);
                 const updatedAircrafts = await fetchWithToken(`${SERVER_API}/aircraft/all`);
                 const data = await updatedAircrafts.json();
                 setAircrafts(data.sort((a, b) => b.id - a.id));

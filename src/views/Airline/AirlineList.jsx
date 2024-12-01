@@ -82,7 +82,7 @@ const AirlineList = () => {
             name: formData.get('name')?.trim(),
             code: formData.get('code')?.trim(),
         };
-        console.log(airlineData)
+        // console.log(airlineData)
         const errors = {};
 
         // Validation
@@ -149,6 +149,7 @@ const AirlineList = () => {
             if (response.ok) {
                 alert(currentAirline ? "Airline updated successfully!" : "Airline added successfully!");
                 setShowForm(false);
+                setErrorMessage([]);
                 const updatedAirlines = await fetchWithToken(`${SERVER_API}/airlines/all`);
                 const data = await updatedAirlines.json();
                 setAirlines(data.sort((a, b) => b.id - a.id));
