@@ -87,6 +87,7 @@ function Users() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const formData = new FormData(e.target);
 
         const userData = {
@@ -94,11 +95,11 @@ function Users() {
             firstName: formData.get('firstName')?.trim(),
             lastName: formData.get('lastName')?.trim(),
             username: formData.get('username')?.trim(),
-            password: formData.get('password')?.trim(),
+            password: formData.get('password')?.trim() || (formType === "edit" ? currentUser?.password : ""), // Lấy password từ currentUser nếu form là edit
             phoneNumber: formData.get('phoneNumber')?.trim(),
             role: formData.get('role')?.trim() || "CUSTOMER",
         };
-        // console.log(userData)
+
         // Chuyển chữ cái đầu tiên của firstName và lastName thành chữ hoa
         userData.firstName = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
         userData.lastName = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
@@ -130,17 +131,7 @@ function Users() {
             errors.username = "Username must be between 3 and 20 characters.";
         }
 
-        if (userData.password) {
-            if (userData.password.length < 5 || userData.password.length > 16) {
-                errors.password = "Password must be between 5 and 16 characters.";
-            } else if (!/[a-zA-Z]/.test(userData.password) || !/\d/.test(userData.password)) {
-                errors.password = "Password must contain at least one letter and one number.";
-            } else if (/\s/.test(userData.password)) {
-                errors.password = "Password cannot contain spaces.";
-            }
-        } else {
-            errors.password = "Password is required.";
-        }
+
 
         if (!userData.phoneNumber || !/^\d+$/.test(userData.phoneNumber)) {
             errors.phoneNumber = "Phone number must be a valid number.";
@@ -169,16 +160,38 @@ function Users() {
             errors.email = "This email is already in use.";
         }
 
-        if (Object.keys(errors).length > 0) {
-            setErrorMessage(errors);
-            return;
+        const hasChanges = () => {
+            if (!currentUser) return true;
+
+            // So sánh từng trường của userData với currentUser
+            return (
+                userData.email !== currentUser.email ||
+                userData.firstName !== currentUser.firstName ||
+                userData.lastName !== currentUser.lastName ||
+                userData.username !== currentUser.username ||
+                userData.password !== currentUser.password || // Nếu cần so sánh mật khẩu giải mã, bạn cần giải mã cả hai trước
+                userData.phoneNumber !== currentUser.phoneNumber ||
+                userData.role !== currentUser.role
+            );
+        };
+
+
+        if (!hasChanges) {
+            if (userData.password) {
+                if (userData.password.length < 5 || userData.password.length > 16) {
+                    errors.password = "Password must be between 5 and 16 characters.";
+                } else if (!/[a-zA-Z]/.test(userData.password) || !/\d/.test(userData.password)) {
+                    errors.password = "Password must contain at least one letter and one number.";
+                } else if (/\s/.test(userData.password)) {
+                    errors.password = "Password cannot contain spaces.";
+                }
+            } else {
+                errors.password = "Password is required.";
+            }
+
         }
 
 
-        const hasChanges = () => {
-            if (!currentUser) return true;
-            return Object.keys(formData).some(key => formData[key] !== currentUser[key]);
-        };
 
         if (formType === "edit" && !hasChanges()) {
             alert("No changes detected. Please make changes before submitting.");
@@ -186,9 +199,21 @@ function Users() {
         }
 
 
+
+        if (Object.keys(errors).length > 0) {
+            setErrorMessage(errors);
+            return;
+        }
+        // console.log(userData)
         try {
             let response;
+            if (formType === "edit") {
+                if (userData.password == currentUser.password) {
+                    userData.password = "";
+                }
+            }
             if (formType === "edit" && currentUser) {
+
                 response = await fetchWithToken(`${SERVER_API}/users/${currentUser.id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
