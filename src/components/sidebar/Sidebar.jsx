@@ -31,7 +31,7 @@ function Sidebar() {
                 <Link to="/airports">Airports</Link>
                 <Link to="/bookings">Bookings</Link>
 
-                <Link to="/login" onClick={handleLogout}>Log Out</Link>
+                <Link to="/login" onClick={handleLogout} className='logout'>Log Out</Link>
             </div>
         </div>
     );
