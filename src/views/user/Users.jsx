@@ -247,7 +247,7 @@ function Users() {
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this user?")) {
             try {
-                // Fetch toàn bộ danh sách bookings
+
                 const responseBooking = await fetchWithToken(`${SERVER_API}/bookings/all`);
                 if (!responseBooking.ok) {
                     alert("Failed to fetch bookings.");
@@ -255,18 +255,18 @@ function Users() {
                 }
                 const bookingData = await responseBooking.json();
 
-                // Kiểm tra nếu user ID tồn tại trong bookings
+
                 const isUserInBooking = bookingData.some((booking) => booking.user.id === id);
                 if (isUserInBooking) {
                     alert("Cannot delete user because they are associated with a booking.");
                     return;
                 }
 
-                // Gọi API để xóa user
+
                 const response = await fetchWithToken(`${SERVER_API}/users/${id}`, { method: "DELETE" });
                 if (response.ok) {
                     alert("User deleted successfully.");
-                    fetchUsers(); // Cập nhật danh sách user
+                    fetchUsers();
                 } else {
                     alert("Failed to delete user.");
                 }
