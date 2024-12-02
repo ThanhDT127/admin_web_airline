@@ -6,6 +6,7 @@ import UserTable from '../../components/tables/UserTable';
 import Pagination from '../../components/Pagination/Pagination';
 import UserForm from '../../components/form/UserForm';
 import { fetchWithToken } from '../fetchWithToken';
+
 const { SERVER_API } = config;
 
 function Users() {
@@ -13,6 +14,7 @@ function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 5;
     const [users, setUsers] = useState([]);
+    const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [formType, setFormType] = useState("add"); // "add" hoặc "edit"
@@ -245,10 +247,26 @@ function Users() {
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this user?")) {
             try {
+                // Fetch toàn bộ danh sách bookings
+                const responseBooking = await fetchWithToken(`${SERVER_API}/bookings/all`);
+                if (!responseBooking.ok) {
+                    alert("Failed to fetch bookings.");
+                    return;
+                }
+                const bookingData = await responseBooking.json();
+
+                // Kiểm tra nếu user ID tồn tại trong bookings
+                const isUserInBooking = bookingData.some((booking) => booking.user.id === id);
+                if (isUserInBooking) {
+                    alert("Cannot delete user because they are associated with a booking.");
+                    return;
+                }
+
+                // Gọi API để xóa user
                 const response = await fetchWithToken(`${SERVER_API}/users/${id}`, { method: "DELETE" });
                 if (response.ok) {
                     alert("User deleted successfully.");
-                    fetchUsers();
+                    fetchUsers(); // Cập nhật danh sách user
                 } else {
                     alert("Failed to delete user.");
                 }
@@ -258,6 +276,7 @@ function Users() {
             }
         }
     };
+
 
     const exportToExcel = () => {
 
