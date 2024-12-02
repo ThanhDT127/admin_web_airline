@@ -102,7 +102,7 @@ function Users() {
             role: formData.get('role')?.trim() || "CUSTOMER",
         };
 
-        // Chuyển chữ cái đầu tiên của firstName và lastName thành chữ hoa
+
         userData.firstName = userData.firstName.charAt(0).toUpperCase() + userData.firstName.slice(1);
         userData.lastName = userData.lastName.charAt(0).toUpperCase() + userData.lastName.slice(1);
 
@@ -171,7 +171,7 @@ function Users() {
                 userData.firstName !== currentUser.firstName ||
                 userData.lastName !== currentUser.lastName ||
                 userData.username !== currentUser.username ||
-                userData.password !== currentUser.password || // Nếu cần so sánh mật khẩu giải mã, bạn cần giải mã cả hai trước
+                userData.password !== currentUser.password ||
                 userData.phoneNumber !== currentUser.phoneNumber ||
                 userData.role !== currentUser.role
             );
