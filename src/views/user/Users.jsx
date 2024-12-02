@@ -289,8 +289,8 @@ function Users() {
     };
 
     const filteredUsers = users.filter((user) =>
-        user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        // user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         String(user.phoneNumber).includes(searchTerm)
     );
 
